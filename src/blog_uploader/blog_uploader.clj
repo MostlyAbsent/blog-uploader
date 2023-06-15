@@ -1,6 +1,7 @@
 (ns blog-uploader.blog-uploader
   (:require
    [next.jdbc :as j]
+   [clojure.java.io :as io]
    [honey.sql :as sql]
    [honey.sql.helpers :as h]
    [blog-uploader.env :refer [env]])
@@ -20,6 +21,15 @@
        (h/columns :title :text :date)
        (h/values [[title text (java.time.LocalDateTime/now)]])
        (sql/format)))
+(defn read-post [p]
+  (let [f (io/file p)]
+    (if (.exists f)
+      {:title (->> f
+                   .getName
+                   (re-find #"(.*)\.md")
+                   second)
+       :text (slurp f)}
+      (throw (Exception. "File not found.")))))
 
 (defn insert-post! [s]
   (transact! s))

@@ -1,8 +1,18 @@
 (ns blog-uploader.blog-uploader-test
   (:require [clojure.test :refer :all]
             [honey.sql :as sql]
+            [clojure.java.io :as io]
             [honey.sql.helpers :as h]
+            [test-with-files.tools :refer [with-files]]
             [blog-uploader.blog-uploader :refer :all]))
+
+(deftest read-post-from-file
+  (testing "A markdown file is correctly read into the program"
+    (is (= (with-files tmp-dir ["test-1.md" "test"]
+             (read-post (str tmp-dir "/test-1.md")))
+           {:title "test-1"
+            :text "test"}))
+    (is (thrown? Exception (read-post "notapath")))))
 
 (deftest execute-sql-on-db
   (testing "DB transactions can execute"
