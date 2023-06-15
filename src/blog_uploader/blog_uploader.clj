@@ -31,8 +31,6 @@
        :text (slurp f)}
       (throw (Exception. "File not found.")))))
 
-(defn insert-post! [s]
-  (transact! s))
 
 (defn -main
   [& args]
