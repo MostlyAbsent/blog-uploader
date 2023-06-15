@@ -16,11 +16,6 @@
 (defn transact! [q]
   (j/execute! mysql-db q))
 
-(defn post->sql [title text]
-  (-> (h/insert-into :post)
-       (h/columns :title :text :date)
-       (h/values [[title text (java.time.LocalDateTime/now)]])
-       (sql/format)))
 (defn read-post [p]
   (let [f (io/file p)]
     (if (.exists f)
@@ -31,6 +26,11 @@
        :text (slurp f)}
       (throw (Exception. "File not found.")))))
 
+(defn post->sql [{:keys [title text]}]
+  (-> (h/insert-into :post)
+      (h/columns :title :text :date)
+      (h/values [[title text (java.time.LocalDateTime/now)]])
+      (sql/format)))
 
 (defn -main
   [& args]

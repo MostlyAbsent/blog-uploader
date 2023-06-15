@@ -26,7 +26,8 @@
 
 (deftest compose-sql-insert
   (testing "Valid sql insert commands are created"
-    (is (= (take 3 (post->sql "Title" "Text"))
+    (is (= (take 3 (post->sql {:title "Title"
+                               :text "Text"}))
            ["INSERT INTO post (title, text, date) VALUES (?, ?, ?)"
             "Title"
             "Text"]))))
