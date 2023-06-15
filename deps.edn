@@ -1,5 +1,6 @@
-{:paths ["src" "resources"]
+{:paths ["src"]
  :deps {org.clojure/clojure {:mvn/version "1.11.1"}
+        org.clojure/tools.cli {:mvn/version "1.0.219"}
         com.magnars/test-with-files {:mvn/version "2021-02-17"}
         mysql/mysql-connector-java {:mvn/version "8.0.30"}
         com.github.seancorfield/next.jdbc {:mvn/version "1.3.874"}

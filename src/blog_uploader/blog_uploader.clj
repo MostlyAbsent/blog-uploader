@@ -1,11 +1,15 @@
 (ns blog-uploader.blog-uploader
   (:require
+   [clojure.tools.cli :refer [parse-opts]]
    [next.jdbc :as j]
    [clojure.java.io :as io]
    [honey.sql :as sql]
    [honey.sql.helpers :as h]
    [blog-uploader.env :refer [env]])
   (:gen-class))
+
+(def cli-options
+  [["-f" "--file FILE" "Blog post file"]])
 
 (def mysql-db {:dbtype "mysql"
                :host (env :HOST)
@@ -32,6 +36,11 @@
       (h/values [[title text (java.time.LocalDateTime/now)]])
       (sql/format)))
 
-(defn -main
-  [& args]
-  )
+(defn -main [& args]
+  (-> args
+      (parse-opts cli-options)
+      :options
+      :file
+      read-post
+      post->sql
+      transact!))
